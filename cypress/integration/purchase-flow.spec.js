@@ -24,7 +24,7 @@ describe('Purchase flow', () => {
         cy.location('pathname').should('be.eq', '/checkout-complete.html')
     })
 
-    it.only('Purchase multiple items', () => {
+    it('Purchase multiple items', () => {
         //add to cart
         cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
         cy.get('[data-test="add-to-cart-sauce-labs-bolt-t-shirt"]').click()
@@ -57,7 +57,7 @@ describe('Purchase flow', () => {
         cy.location('pathname').should('be.eq', '/checkout-complete.html')
     })
     
-    it.only('Remove item from card', () => {
+    it('Remove item from card', () => {
         //add to cart
         cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
         cy.get('[data-test="add-to-cart-sauce-labs-bolt-t-shirt"]').click()
@@ -82,7 +82,25 @@ describe('Purchase flow', () => {
                     expect(subtotal).to.be.eq(price1)
             })
         })
+    })
 
+    it('Checkout should fail when removing all items from cart', () => {
+        //add to cart
+        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
+        //go to cart
+        cy.get('#shopping_cart_container').click()
+        //remove item
+        cy.get('[data-test="remove-sauce-labs-backpack"]').click()
+        //check item is removed
+        cy.get('.cart_item').should('not.exist')
+        //checkout
+        cy.get('[data-test="checkout"]').click()
+        cy.get('[data-test="firstName"]').type('Sama')
+        cy.get('[data-test="lastName"]').type('Mammadova')
+        cy.get('[data-test="postalCode"]').type('11111')
+        cy.get('[data-test="continue"]').click()
+        cy.get('[data-test="finish"]').click()
+        cy.location('pathname').should('not.eq', '/checkout-complete.html')
     })
 
     //Checkout information fields validation
