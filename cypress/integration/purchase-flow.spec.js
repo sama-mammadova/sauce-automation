@@ -101,21 +101,16 @@ describe('Purchase flow', () => {
 
     it('Checkout should fail when removing all items from cart', () => {
         //add to cart
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
+        Product.items().eq(9).find(Product.queries.addToCart).click()
         //go to cart
-        cy.get('#shopping_cart_container').click()
+        Product.goToCartButton().click()
         //remove item
-        cy.get('[data-test="remove-sauce-labs-backpack"]').click()
+        Cart.items().eq(0).find(Cart.queries.remove).click()
         //check item is removed
         Cart.items().should('not.exist')
         //checkout
         Cart.checkoutButton().click()
-        CheckoutForm.firstNameInput().type('Sama')
-        CheckoutForm.lastNameInput().type('Mammadova')
-        CheckoutForm.postalCodeInput().type('11111')
-        CheckoutForm.continueButton().click()
-        cy.get('[data-test="finish"]').click()
-        cy.location('pathname').should('not.eq', '/checkout-complete.html')
+        cy.location('pathname').should('not.eq', '/checkout-step-one.html')
     })
 
     
