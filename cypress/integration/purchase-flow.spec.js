@@ -69,16 +69,19 @@ describe('Purchase flow', () => {
         cy.location('pathname').should('be.eq', '/checkout-complete.html')
     })
     
-    it('Remove item from card', () => {
+    it('Purchase after modifying cart', () => {
         //add to cart
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
-        cy.get('[data-test="add-to-cart-sauce-labs-bolt-t-shirt"]').click()
-        cy.get('[data-test="remove-sauce-labs-backpack"]').parent().find('.inventory_item_price').invoke('text').as('price1')
+        let product1 = Product.items().eq(0)
+        product1.find(Product.queries.price).as('price1')
+        product1.find(Product.queries.addToCart).click()
+
+        let product2 = Product.items().eq(1)
+        product2.find(Product.queries.addToCart).click()
         //go to cart
-        cy.get('#shopping_cart_container').click()
+        Product.goToCartButton().click()
         Cart.items().should('have.length', 2)
-        //remove item
-        cy.get('[data-test="remove-sauce-labs-bolt-t-shirt"]').click()
+        //remove an item
+        Cart.items(1).find(Cart.queries.remove).click()
         //check item is removed
         Cart.items().should('have.length', 1)
         //checkout
@@ -87,7 +90,7 @@ describe('Purchase flow', () => {
         CheckoutForm.lastNameInput().type('Mammadova')
         CheckoutForm.postalCodeInput().type('11111')
         CheckoutForm.continueButton().click()
-        cy.get('.summary_subtotal_label').invoke('text').then(subtotalText => {
+        CheckoutOverview.subtotalLabel().invoke('text').then(subtotalText => {
             cy.get('@price1').then(price1Text => {
                     let price1 = +price1Text.replace('$', '')
                     let subtotal = +subtotalText.replace('Item total: $', '')
