@@ -15,9 +15,9 @@ describe('Purchase flow validation', () => {
         //checkout
         Cart.checkoutButton().click()
         //fill in fields
-        CheckoutForm.firstName()
-        CheckoutForm.lastName().type("Mammadova")
-        CheckoutForm.postalCode().type("11111")
+        CheckoutForm.firstNameInput()
+        CheckoutForm.lastNameInput().type("Mammadova")
+        CheckoutForm.postalCodeInput().type("11111")
         CheckoutForm.continueButton().click()
         cy.get('[data-test="error"]').should('contain.text', "Error: First Name is required")
 
@@ -31,9 +31,9 @@ describe('Purchase flow validation', () => {
         //checkout
         Cart.checkoutButton().click()
         //fill in fields
-        CheckoutForm.firstName().type("Sama")
-        CheckoutForm.lastName()
-        CheckoutForm.postalCode().type("11111")
+        CheckoutForm.firstNameInput().type("Sama")
+        CheckoutForm.lastNameInput()
+        CheckoutForm.postalCodeInput().type("11111")
         CheckoutForm.continueButton().click()
         cy.get('[data-test="error"]').should('contain.text', "Error: Last Name is required")
     })
@@ -46,9 +46,9 @@ describe('Purchase flow validation', () => {
         //checkout
         Cart.checkoutButton().click()
         //fill in fields
-        CheckoutForm.firstName().type("Sama")
-        CheckoutForm.lastName().type("Mammadova")
-        CheckoutForm.postalCode()
+        CheckoutForm.firstNameInput().type("Sama")
+        CheckoutForm.lastNameInput().type("Mammadova")
+        CheckoutForm.postalCodeInput()
         CheckoutForm.continueButton().click()
         cy.get('[data-test="error"]').should('contain.text', "Error: Postal Code is required")
     })
@@ -61,9 +61,9 @@ describe('Purchase flow validation', () => {
         //checkout
         Cart.checkoutButton().click()
         //fill in fields
-        CheckoutForm.firstName().type(" ")
-        CheckoutForm.lastName().type("Mammadova")
-        CheckoutForm.postalCode().type("11111")
+        CheckoutForm.firstNameInput().type(" ")
+        CheckoutForm.lastNameInput().type("Mammadova")
+        CheckoutForm.postalCodeInput().type("11111")
         CheckoutForm.continueButton().click()
         cy.location('pathname').should('not.be.eq', '/checkout-step-two.html')
     })
@@ -76,9 +76,9 @@ describe('Purchase flow validation', () => {
         //checkout
         Cart.checkoutButton().click()
         //fill in fields
-        CheckoutForm.firstName().type("Sama")
-        CheckoutForm.lastName().type(" ")
-        CheckoutForm.postalCode().type("11111")
+        CheckoutForm.firstNameInput().type("Sama")
+        CheckoutForm.lastNameInput().type(" ")
+        CheckoutForm.postalCodeInput().type("11111")
         CheckoutForm.continueButton().click()
         cy.location('pathname').should('not.be.eq', '/checkout-step-two.html')
     })
@@ -91,9 +91,9 @@ describe('Purchase flow validation', () => {
         //checkout
         Cart.checkoutButton().click()
         //fill in fields
-        CheckoutForm.firstName().type("Sama")
-        CheckoutForm.lastName().type("Mammadova")
-        CheckoutForm.postalCode().type(" ")
+        CheckoutForm.firstNameInput().type("Sama")
+        CheckoutForm.lastNameInput().type("Mammadova")
+        CheckoutForm.postalCodeInput().type(" ")
         CheckoutForm.continueButton().click()
         cy.location('pathname').should('not.be.eq', '/checkout-step-two.html')
     })

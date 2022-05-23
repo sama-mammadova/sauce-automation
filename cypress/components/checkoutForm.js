@@ -1,13 +1,13 @@
 export class CheckoutForm {
-    static firstName() {
+    static firstNameInput() {
         return cy.get('[data-test="firstName"]')
     }
 
-    static lastName() {
+    static lastNameInput() {
         return cy.get('[data-test="lastName"]')
     }
 
-    static postalCode() {
+    static postalCodeInput() {
         return cy.get('[data-test="postalCode"]')
     }
 

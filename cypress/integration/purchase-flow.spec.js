@@ -1,4 +1,8 @@
 import {Cart} from "../components/cart";
+import {CheckoutForm} from "../components/checkoutForm";
+import {Product, queries} from "../components/product";
+import {Header} from "../components/header";
+import {CheckoutOverview} from "../components/checkoutOverview";
 
 describe('Purchase flow', () => {
     beforeEach(()=> {
@@ -6,23 +10,24 @@ describe('Purchase flow', () => {
         cy.login()
     })
 
-    it('Purchase single item', () => {
-        //add to cart
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
+    it.only('Purchase single item', () => {
+        //pick the first item and add to cart
+        Product.items().eq(0).find(Product.queries.addToCart).click()
         //go to cart
-        cy.get('#shopping_cart_container').click()
+        Product.goToCartButton().click()
+        Header.title().should('have.text', 'Your Cart')
         //check if it is added
         Cart.items().should('have.length', 1)
         //checkout
         Cart.checkoutButton().click()
-        cy.get('#header_container .title').should('have.text', 'Checkout: Your Information')
-        cy.get('[data-test="firstName"]').type('Sama')
-        cy.get('[data-test="lastName"]').type('Mammadova')
-        cy.get('[data-test="postalCode"]').type('11111')
-        cy.get('[data-test="continue"]').click()
-        cy.get('#header_container .title').should('have.text', 'Checkout: Overview')
-        cy.get('[data-test="finish"]').click()
-        cy.get('#header_container .title').should('have.text', 'Checkout: Complete!')
+        Header.title().should('have.text', 'Checkout: Your Information')
+        CheckoutForm.firstNameInput().type('Sama')
+        CheckoutForm.lastNameInput().type('Mammadova')
+        CheckoutForm.postalCodeInput().type('11111')
+        CheckoutForm.continueButton().click()
+        Header.title().should('have.text', 'Checkout: Overview')
+        CheckoutOverview.finishButton().click()
+        Header.title().should('have.text', 'Checkout: Complete!')
         cy.location('pathname').should('be.eq', '/checkout-complete.html')
     })
 
@@ -39,10 +44,10 @@ describe('Purchase flow', () => {
         Cart.items().should('have.length', 2)
         //checkout
         Cart.checkoutButton().click()
-        cy.get('[data-test="firstName"]').type('Sama')
-        cy.get('[data-test="lastName"]').type('Mammadova')
-        cy.get('[data-test="postalCode"]').type('11111')
-        cy.get('[data-test="continue"]').click()
+        CheckoutForm.firstNameInput().type('Sama')
+        CheckoutForm.lastNameInput().type('Mammadova')
+        CheckoutForm.postalCodeInput().type('11111')
+        CheckoutForm.continueButton().click()
         //check item total price
         cy.get('.summary_subtotal_label').invoke('text').then(subtotalText => {
             cy.get('@price1').then(price1Text => {
@@ -73,10 +78,10 @@ describe('Purchase flow', () => {
         Cart.items().should('have.length', 1)
         //checkout
         Cart.checkoutButton().click()
-        cy.get('[data-test="firstName"]').type('Sama')
-        cy.get('[data-test="lastName"]').type('Mammadova')
-        cy.get('[data-test="postalCode"]').type('11111')
-        cy.get('[data-test="continue"]').click()
+        CheckoutForm.firstNameInput().type('Sama')
+        CheckoutForm.lastNameInput().type('Mammadova')
+        CheckoutForm.postalCodeInput().type('11111')
+        CheckoutForm.continueButton().click()
         cy.get('.summary_subtotal_label').invoke('text').then(subtotalText => {
             cy.get('@price1').then(price1Text => {
                     let price1 = +price1Text.replace('$', '')
@@ -97,10 +102,10 @@ describe('Purchase flow', () => {
         Cart.items().should('not.exist')
         //checkout
         Cart.checkoutButton().click()
-        cy.get('[data-test="firstName"]').type('Sama')
-        cy.get('[data-test="lastName"]').type('Mammadova')
-        cy.get('[data-test="postalCode"]').type('11111')
-        cy.get('[data-test="continue"]').click()
+        CheckoutForm.firstNameInput().type('Sama')
+        CheckoutForm.lastNameInput().type('Mammadova')
+        CheckoutForm.postalCodeInput().type('11111')
+        CheckoutForm.continueButton().click()
         cy.get('[data-test="finish"]').click()
         cy.location('pathname').should('not.eq', '/checkout-complete.html')
     })
