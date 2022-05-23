@@ -5,12 +5,12 @@ import {Header} from "../components/header";
 import {CheckoutOverview} from "../components/checkoutOverview";
 
 describe('Purchase flow', () => {
-    beforeEach(()=> {
+    beforeEach(() => {
         cy.visit('/')
         cy.login()
     })
 
-    it.only('Purchase single item', () => {
+    it('Purchase single item', () => {
         //pick the first item and add to cart
         Product.items().eq(0).find(Product.queries.addToCart).click()
         //go to cart
@@ -31,16 +31,13 @@ describe('Purchase flow', () => {
         cy.location('pathname').should('be.eq', '/checkout-complete.html')
     })
 
-    it('Purchase multiple items', () => {
+    it.only('Purchase multiple items', () => {
         //add first two items to cart
+        Product.items().eq(0).find(Product.queries.price).invoke('text').as('price1')
+        Product.items().eq(0).find(Product.queries.addToCart).click()
 
-        let product1 = Product.items().eq(0)
-        product1.find(Product.queries.price).as('price1')
-        product1.find(Product.queries.addToCart).click()
-
-        let product2 = Product.items().eq(1)
-        product2.find(Product.queries.price).as('price2')
-        product2.find(Product.queries.addToCart).click()
+        Product.items().eq(1).find(Product.queries.price).invoke('text').as('price2')
+        Product.items().eq(1).find(Product.queries.addToCart).click()
 
         //go to cart
         Product.goToCartButton().click()
@@ -68,7 +65,7 @@ describe('Purchase flow', () => {
         CheckoutOverview.finishButton().click()
         cy.location('pathname').should('be.eq', '/checkout-complete.html')
     })
-    
+
     it('Purchase after modifying cart', () => {
         //add to cart
         let product1 = Product.items().eq(0)
@@ -92,9 +89,9 @@ describe('Purchase flow', () => {
         CheckoutForm.continueButton().click()
         CheckoutOverview.subtotalLabel().invoke('text').then(subtotalText => {
             cy.get('@price1').then(price1Text => {
-                    let price1 = +price1Text.replace('$', '')
-                    let subtotal = +subtotalText.replace('Item total: $', '')
-                    expect(subtotal).to.be.eq(price1)
+                let price1 = +price1Text.replace('$', '')
+                let subtotal = +subtotalText.replace('Item total: $', '')
+                expect(subtotal).to.be.eq(price1)
             })
         })
     })
@@ -113,5 +110,5 @@ describe('Purchase flow', () => {
         cy.location('pathname').should('not.eq', '/checkout-step-one.html')
     })
 
-    
+
 })
