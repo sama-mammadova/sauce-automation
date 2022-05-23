@@ -32,14 +32,18 @@ describe('Purchase flow', () => {
     })
 
     it('Purchase multiple items', () => {
-        //add to cart
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
-        cy.get('[data-test="add-to-cart-sauce-labs-bolt-t-shirt"]').click()
-        cy.get('[data-test="remove-sauce-labs-backpack"]').parent().find('.inventory_item_price').invoke('text').as('price1')
-        cy.get('[data-test="remove-sauce-labs-bolt-t-shirt"]').parent().find('.inventory_item_price').invoke('text').as('price2')
+        //add first two items to cart
+
+        let product1 = Product.items().eq(0)
+        product1.find(Product.queries.price).as('price1')
+        product1.find(Product.queries.addToCart).click()
+
+        let product2 = Product.items().eq(1)
+        product2.find(Product.queries.price).as('price2')
+        product2.find(Product.queries.addToCart).click()
 
         //go to cart
-        cy.get('#shopping_cart_container').click()
+        Product.goToCartButton().click()
         //check if items are added
         Cart.items().should('have.length', 2)
         //checkout
@@ -48,19 +52,20 @@ describe('Purchase flow', () => {
         CheckoutForm.lastNameInput().type('Mammadova')
         CheckoutForm.postalCodeInput().type('11111')
         CheckoutForm.continueButton().click()
-        //check item total price
-        cy.get('.summary_subtotal_label').invoke('text').then(subtotalText => {
+
+        //check if item total price calculation is correct
+        CheckoutOverview.subtotalLabel().invoke('text').then(subtotalText => {
             cy.get('@price1').then(price1Text => {
                 cy.get('@price2').then(price2Text => {
+                    let subtotal = +subtotalText.replace('Item total: $', '')
                     let price1 = +price1Text.replace('$', '')
                     let price2 = +price2Text.replace('$', '')
                     let expectedSubtotal = price1 + price2
-                    let subtotal = +subtotalText.replace('Item total: $', '')
                     expect(subtotal).to.be.eq(expectedSubtotal)
                 })
             })
         })
-        cy.get('[data-test="finish"]').click()
+        CheckoutOverview.finishButton().click()
         cy.location('pathname').should('be.eq', '/checkout-complete.html')
     })
     

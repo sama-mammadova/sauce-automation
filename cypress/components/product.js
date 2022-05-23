@@ -10,6 +10,7 @@ export class Product {
 
     static queries = {
         addToCart: '[data-test^="add-to-cart"]',
-        remove: '[data-test^="remove"]'
+        remove: '[data-test^="remove"]',
+        price: '.inventory_item_price'
     }
 }
