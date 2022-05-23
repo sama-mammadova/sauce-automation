@@ -1,6 +1,6 @@
 import {Cart} from "../components/cart";
 import {CheckoutForm} from "../components/checkoutForm";
-import {Product, queries} from "../components/product";
+import {Product} from "../components/product";
 import {Header} from "../components/header";
 import {CheckoutOverview} from "../components/checkoutOverview";
 

@@ -11,6 +11,10 @@ export class CheckoutForm {
         return cy.get('[data-test="postalCode"]')
     }
 
+    static errorLabel(){
+        return cy.get('[data-test="error"]')
+    }
+
     static continueButton() {
         return cy.get('[data-test="continue"]')
     }
