@@ -31,7 +31,7 @@ describe('Purchase flow', () => {
         cy.location('pathname').should('be.eq', '/checkout-complete.html')
     })
 
-    it.only('Purchase multiple items', () => {
+    it('Purchase multiple items', () => {
         //add first two items to cart
         Product.items().eq(0).find(Product.queries.price).invoke('text').as('price1')
         Product.items().eq(0).find(Product.queries.addToCart).click()
@@ -68,17 +68,15 @@ describe('Purchase flow', () => {
 
     it('Purchase after modifying cart', () => {
         //add to cart
-        let product1 = Product.items().eq(0)
-        product1.find(Product.queries.price).as('price1')
-        product1.find(Product.queries.addToCart).click()
+        Product.items().eq(0).find(Product.queries.price).invoke('text').as('price1')
+        Product.items().eq(0).find(Product.queries.addToCart).click()
 
-        let product2 = Product.items().eq(1)
-        product2.find(Product.queries.addToCart).click()
+        Product.items().eq(1).find(Product.queries.addToCart).click()
         //go to cart
         Product.goToCartButton().click()
         Cart.items().should('have.length', 2)
         //remove an item
-        Cart.items(1).find(Cart.queries.remove).click()
+        Cart.items().eq(1).find(Cart.queries.remove).click()
         //check item is removed
         Cart.items().should('have.length', 1)
         //checkout
@@ -98,7 +96,7 @@ describe('Purchase flow', () => {
 
     it('Checkout should fail when removing all items from cart', () => {
         //add to cart
-        Product.items().eq(9).find(Product.queries.addToCart).click()
+        Product.items().eq(0).find(Product.queries.addToCart).click()
         //go to cart
         Product.goToCartButton().click()
         //remove item
