@@ -13,6 +13,7 @@ describe('Purchase flow', () => {
     it('Purchase single item', () => {
         //pick the first item and add to cart
         Product.items().eq(0).find(Product.queries.addToCart).click()
+        Header.cartBadge().should('have.text', 1)
         //go to cart
         Product.goToCartButton().click()
         Header.title().should('have.text', 'Your Cart')
@@ -35,9 +36,11 @@ describe('Purchase flow', () => {
         //add first two items to cart
         Product.items().eq(0).find(Product.queries.price).invoke('text').as('price1')
         Product.items().eq(0).find(Product.queries.addToCart).click()
+        Header.cartBadge().should('have.text', 1)
 
         Product.items().eq(1).find(Product.queries.price).invoke('text').as('price2')
         Product.items().eq(1).find(Product.queries.addToCart).click()
+        Header.cartBadge().should('have.text', 2)
 
         //go to cart
         Product.goToCartButton().click()
@@ -70,14 +73,17 @@ describe('Purchase flow', () => {
         //add to cart
         Product.items().eq(0).find(Product.queries.price).invoke('text').as('price1')
         Product.items().eq(0).find(Product.queries.addToCart).click()
+        Header.cartBadge().should('have.text', 1)
 
         Product.items().eq(1).find(Product.queries.addToCart).click()
+        Header.cartBadge().should('have.text', 2)
         //go to cart
         Product.goToCartButton().click()
         Cart.items().should('have.length', 2)
         //remove an item
         Cart.items().eq(1).find(Cart.queries.remove).click()
         //check item is removed
+        Header.cartBadge().should('have.text', 1)
         Cart.items().should('have.length', 1)
         //checkout
         Cart.checkoutButton().click()
@@ -94,14 +100,9 @@ describe('Purchase flow', () => {
         })
     })
 
-    it('Checkout should fail when removing all items from cart', () => {
-        //add to cart
-        Product.items().eq(0).find(Product.queries.addToCart).click()
+    it('Checkout should fail with empty cart', () => {
         //go to cart
         Product.goToCartButton().click()
-        //remove item
-        Cart.items().eq(0).find(Cart.queries.remove).click()
-        //check item is removed
         Cart.items().should('not.exist')
         //checkout
         Cart.checkoutButton().click()
