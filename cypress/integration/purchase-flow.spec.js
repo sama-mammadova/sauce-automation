@@ -1,3 +1,5 @@
+import {Cart} from "../components/cart";
+
 describe('Purchase flow', () => {
     beforeEach(()=> {
         cy.visit('/')
@@ -10,7 +12,7 @@ describe('Purchase flow', () => {
         //go to cart
         cy.get('#shopping_cart_container').click()
         //check if it is added
-        cy.get('.cart_item').should('have.length', 1)
+        Cart.items().should('have.length', 1)
         //checkout
         cy.get('[data-test="checkout"]').click()
         cy.get('#header_container .title').should('have.text', 'Checkout: Your Information')
@@ -34,7 +36,7 @@ describe('Purchase flow', () => {
         //go to cart
         cy.get('#shopping_cart_container').click()
         //check if items are added
-        cy.get('.cart_item').should('have.length', 2)
+        Cart.items().should('have.length', 2)
         //checkout
         cy.get('[data-test="checkout"]').click()
         cy.get('[data-test="firstName"]').type('Sama')
@@ -64,11 +66,11 @@ describe('Purchase flow', () => {
         cy.get('[data-test="remove-sauce-labs-backpack"]').parent().find('.inventory_item_price').invoke('text').as('price1')
         //go to cart
         cy.get('#shopping_cart_container').click()
-        cy.get('.cart_item').should('have.length', 2)
+        Cart.items().should('have.length', 2)
         //remove item
         cy.get('[data-test="remove-sauce-labs-bolt-t-shirt"]').click()
         //check item is removed
-        cy.get('.cart_item').should('have.length', 1)
+        Cart.items().should('have.length', 1)
         //checkout
         cy.get('[data-test="checkout"]').click()
         cy.get('[data-test="firstName"]').type('Sama')
@@ -92,7 +94,7 @@ describe('Purchase flow', () => {
         //remove item
         cy.get('[data-test="remove-sauce-labs-backpack"]').click()
         //check item is removed
-        cy.get('.cart_item').should('not.exist')
+        Cart.items().should('not.exist')
         //checkout
         cy.get('[data-test="checkout"]').click()
         cy.get('[data-test="firstName"]').type('Sama')
@@ -103,96 +105,5 @@ describe('Purchase flow', () => {
         cy.location('pathname').should('not.eq', '/checkout-complete.html')
     })
 
-    //Checkout information fields validation
-    it('First name is required', () => {
-        //add to cart
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
-        //go to cart
-        cy.get('#shopping_cart_container').click()
-        //checkout
-        cy.get('[data-test="checkout"]').click()
-        //fill in fields
-        cy.get('[data-test="firstName"]')
-        cy.get('[data-test="lastName"]').type("Mammadova")
-        cy.get('[data-test="postalCode"]').type("11111")
-        cy.get('[data-test="continue"]').click()
-        cy.get('[data-test="error"]').should('contain.text', "Error: First Name is required")
-
-    })
-
-    it('Last name is required', () => {
-        //add to cart
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
-        //go to cart
-        cy.get('#shopping_cart_container').click()
-        //checkout
-        cy.get('[data-test="checkout"]').click()
-        //fill in fields
-        cy.get('[data-test="firstName"]').type("Sama")
-        cy.get('[data-test="lastName"]')
-        cy.get('[data-test="postalCode"]').type("11111")
-        cy.get('[data-test="continue"]').click()
-        cy.get('[data-test="error"]').should('contain.text', "Error: Last Name is required")
-    })
-
-    it('Postal code is required', () => {
-        //add to cart
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
-        //go to cart
-        cy.get('#shopping_cart_container').click()
-        //checkout
-        cy.get('[data-test="checkout"]').click()
-        //fill in fields
-        cy.get('[data-test="firstName"]').type("Sama")
-        cy.get('[data-test="lastName"]').type("Mammadova")
-        cy.get('[data-test="postalCode"]')
-        cy.get('[data-test="continue"]').click()
-        cy.get('[data-test="error"]').should('contain.text', "Error: Postal Code is required")
-    })
-
-    it('Checkout should fail with empty first name', () => {
-        //add to cart
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
-        //go to cart
-        cy.get('#shopping_cart_container').click()
-        //checkout
-        cy.get('[data-test="checkout"]').click()
-        //fill in fields
-        cy.get('[data-test="firstName"]').type(" ")
-        cy.get('[data-test="lastName"]').type("Mammadova")
-        cy.get('[data-test="postalCode"]').type("11111")
-        cy.get('[data-test="continue"]').click()
-        cy.location('pathname').should('not.be.eq', '/checkout-step-two.html')
-    })
-
-    it('Checkout should fail with empty last name', () => {
-        //add to cart
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
-        //go to cart
-        cy.get('#shopping_cart_container').click()
-        //checkout
-        cy.get('[data-test="checkout"]').click()
-        //fill in fields
-        cy.get('[data-test="firstName"]').type("Sama")
-        cy.get('[data-test="lastName"]').type(" ")
-        cy.get('[data-test="postalCode"]').type("11111")
-        cy.get('[data-test="continue"]').click()
-        cy.location('pathname').should('not.be.eq', '/checkout-step-two.html')
-    })
-
-    it('Checkout should fail with empty postal code', () => {
-        //add to cart
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
-        //go to cart
-        cy.get('#shopping_cart_container').click()
-        //checkout
-        cy.get('[data-test="checkout"]').click()
-        //fill in fields
-        cy.get('[data-test="firstName"]').type("Sama")
-        cy.get('[data-test="lastName"]').type("Mammadova")
-        cy.get('[data-test="postalCode"]').type(" ")
-        cy.get('[data-test="continue"]').click()
-        cy.location('pathname').should('not.be.eq', '/checkout-step-two.html')
-    })
-
+    
 })
