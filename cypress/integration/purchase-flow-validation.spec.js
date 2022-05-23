@@ -1,4 +1,5 @@
 import {CheckoutForm} from "../components/CheckoutForm";
+import {Cart} from "../components/cart";
 
 describe('Purchase flow validation', () => {
     beforeEach(() => {
@@ -12,7 +13,7 @@ describe('Purchase flow validation', () => {
         //go to cart
         cy.get('#shopping_cart_container').click()
         //checkout
-        cy.get('[data-test="checkout"]').click()
+        Cart.checkoutButton().click()
         //fill in fields
         CheckoutForm.firstName()
         CheckoutForm.lastName().type("Mammadova")
@@ -28,7 +29,7 @@ describe('Purchase flow validation', () => {
         //go to cart
         cy.get('#shopping_cart_container').click()
         //checkout
-        cy.get('[data-test="checkout"]').click()
+        Cart.checkoutButton().click()
         //fill in fields
         CheckoutForm.firstName().type("Sama")
         CheckoutForm.lastName()
@@ -43,7 +44,7 @@ describe('Purchase flow validation', () => {
         //go to cart
         cy.get('#shopping_cart_container').click()
         //checkout
-        cy.get('[data-test="checkout"]').click()
+        Cart.checkoutButton().click()
         //fill in fields
         CheckoutForm.firstName().type("Sama")
         CheckoutForm.lastName().type("Mammadova")
@@ -58,7 +59,7 @@ describe('Purchase flow validation', () => {
         //go to cart
         cy.get('#shopping_cart_container').click()
         //checkout
-        cy.get('[data-test="checkout"]').click()
+        Cart.checkoutButton().click()
         //fill in fields
         CheckoutForm.firstName().type(" ")
         CheckoutForm.lastName().type("Mammadova")
@@ -73,7 +74,7 @@ describe('Purchase flow validation', () => {
         //go to cart
         cy.get('#shopping_cart_container').click()
         //checkout
-        cy.get('[data-test="checkout"]').click()
+        Cart.checkoutButton().click()
         //fill in fields
         CheckoutForm.firstName().type("Sama")
         CheckoutForm.lastName().type(" ")
@@ -88,7 +89,7 @@ describe('Purchase flow validation', () => {
         //go to cart
         cy.get('#shopping_cart_container').click()
         //checkout
-        cy.get('[data-test="checkout"]').click()
+        Cart.checkoutButton().click()
         //fill in fields
         CheckoutForm.firstName().type("Sama")
         CheckoutForm.lastName().type("Mammadova")

@@ -14,7 +14,7 @@ describe('Purchase flow', () => {
         //check if it is added
         Cart.items().should('have.length', 1)
         //checkout
-        cy.get('[data-test="checkout"]').click()
+        Cart.checkoutButton().click()
         cy.get('#header_container .title').should('have.text', 'Checkout: Your Information')
         cy.get('[data-test="firstName"]').type('Sama')
         cy.get('[data-test="lastName"]').type('Mammadova')
@@ -38,7 +38,7 @@ describe('Purchase flow', () => {
         //check if items are added
         Cart.items().should('have.length', 2)
         //checkout
-        cy.get('[data-test="checkout"]').click()
+        Cart.checkoutButton().click()
         cy.get('[data-test="firstName"]').type('Sama')
         cy.get('[data-test="lastName"]').type('Mammadova')
         cy.get('[data-test="postalCode"]').type('11111')
@@ -72,7 +72,7 @@ describe('Purchase flow', () => {
         //check item is removed
         Cart.items().should('have.length', 1)
         //checkout
-        cy.get('[data-test="checkout"]').click()
+        Cart.checkoutButton().click()
         cy.get('[data-test="firstName"]').type('Sama')
         cy.get('[data-test="lastName"]').type('Mammadova')
         cy.get('[data-test="postalCode"]').type('11111')
@@ -96,7 +96,7 @@ describe('Purchase flow', () => {
         //check item is removed
         Cart.items().should('not.exist')
         //checkout
-        cy.get('[data-test="checkout"]').click()
+        Cart.checkoutButton().click()
         cy.get('[data-test="firstName"]').type('Sama')
         cy.get('[data-test="lastName"]').type('Mammadova')
         cy.get('[data-test="postalCode"]').type('11111')
